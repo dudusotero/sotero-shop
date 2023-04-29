@@ -3,6 +3,8 @@ import './globals.css'
 
 const { SITE_NAME } = process.env
 
+export const revalidate = 10
+
 export const metadata = {
   title: {
     default: SITE_NAME!,
