@@ -5,6 +5,8 @@ async function getProducts() {
   return products
 }
 
+export const runtime = 'edge'
+
 export default async function Home() {
   const products = await getProducts()
 

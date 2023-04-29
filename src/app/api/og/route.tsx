@@ -1,7 +1,5 @@
 import { ImageResponse, NextRequest } from 'next/server'
 
-export const runtime = 'edge'
-
 const interRegular = fetch(
   new URL('./Inter-Regular.ttf', import.meta.url)
 ).then((res) => res.arrayBuffer())
