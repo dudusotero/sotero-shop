@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/server'
 
-export const alt = 'Sotero Shop'
+export const alt = 'SS - Sotero Shop'
 export const size = {
   width: 1200,
   height: 630,
@@ -21,7 +21,7 @@ export default function og() {
           justifyContent: 'center',
         }}
       >
-        Sotero Shop
+        SS - Sotero Shop
       </div>
     ),
     size
