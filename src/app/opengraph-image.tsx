@@ -13,8 +13,7 @@ export default function og() {
       <div
         style={{
           fontSize: 128,
-          background: 'black',
-          color: 'white',
+          background: 'white',
           width: '100%',
           height: '100%',
           display: 'flex',
