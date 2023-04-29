@@ -2,9 +2,9 @@ import { ImageResponse, NextRequest } from 'next/server'
 
 export const runtime = 'edge'
 
-export async function GET(req: NextRequest): Promise<Response | ImageResponse> {
+export async function GET(request: NextRequest): Promise<Response | ImageResponse> {
   try {
-    const { searchParams } = new URL(req.url)
+    const { searchParams } = new URL(request.url)
 
     const title = searchParams.has('title')
       ? searchParams.get('title')?.slice(0, 100)
