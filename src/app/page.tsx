@@ -2,7 +2,6 @@ import swell from '@/instances/swell'
 
 async function getProducts() {
   const products = await swell.products.list()
-
   return products
 }
 
