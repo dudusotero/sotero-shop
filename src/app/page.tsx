@@ -5,13 +5,15 @@ async function getProducts() {
   return products
 }
 
+export const runtime = 'edge'
+
 export default async function Home() {
   const products = await getProducts()
 
   return (
-    <main>
+    <div>
       <h1 className="text-4xl">Sotero Shop</h1>
       <pre>{JSON.stringify(products, null, 2)}</pre>
-    </main>
+    </div>
   )
 }
