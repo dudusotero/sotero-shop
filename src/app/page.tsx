@@ -1,19 +1,20 @@
+import { ProductCard } from '@/components'
 import swell from '@/instances/swell'
 
 async function getProducts() {
-  const products = await swell.products.list()
-  return products
+  return await swell.products.list()
 }
 
 export const runtime = 'edge'
 
 export default async function Home() {
-  const products = await getProducts()
+  const data = await getProducts()
 
   return (
     <div>
       <h1 className="text-4xl">Sotero Shop</h1>
-      <pre>{JSON.stringify(products, null, 2)}</pre>
+      <ProductCard product={data.results[0]} />
+      <pre>{JSON.stringify(data, null, 2)}</pre>
     </div>
   )
 }
