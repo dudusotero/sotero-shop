@@ -5,6 +5,7 @@ import { Analytics } from '@vercel/analytics/react'
 import classNames from 'classnames'
 import { getServerSession } from 'next-auth'
 import { Inter, Roboto_Mono } from 'next/font/google'
+import NextTopLoader from 'nextjs-toploader'
 import './globals.css'
 
 const inter = Inter({
@@ -63,6 +64,7 @@ export default async function RootLayout({
       className={classNames(inter.variable, roboto_mono.variable)}
     >
       <body>
+        <NextTopLoader showSpinner={false} color="rgb(79 70 229)" />
         <Provider session={session}>
           <Header categories={data.results} />
           <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 lg:pt-16">
