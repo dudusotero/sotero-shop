@@ -9,9 +9,7 @@ async function getProductBySlug(slug: string) {
   }) as unknown as Product
 }
 
-export const revalidate = 10
-
-export const runtime = 'edge'
+export const revalidate = 60
 
 type PageProps = {
   params: {

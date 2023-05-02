@@ -2,7 +2,9 @@ import { ImageResponse, NextRequest } from 'next/server'
 
 export const runtime = 'edge'
 
-export async function GET(request: NextRequest): Promise<Response | ImageResponse> {
+export async function GET(
+  request: NextRequest
+): Promise<Response | ImageResponse> {
   try {
     const { searchParams } = new URL(request.url)
 
