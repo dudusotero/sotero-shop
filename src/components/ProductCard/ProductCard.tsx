@@ -1,16 +1,14 @@
+import type { Product } from '@/types'
 import Image from 'next/image'
 import Link from 'next/link'
-import type { ReactNode } from 'react'
 import ProductImage from './ProductImage'
 import ProductInfo from './ProductInfo'
 
 type Props = {
-  product: swell.Product & {
-    categories?: swell.ResultsResponse<swell.Category>
-  }
-  image?: ReactNode
-  info?: ReactNode
-  action?: ReactNode
+  product: Product
+  image?: React.ReactNode
+  info?: React.ReactNode
+  action?: React.ReactNode
 }
 
 function ProductCard({ product }: Props) {
@@ -30,9 +28,7 @@ function ProductCard({ product }: Props) {
       <div className="pb-4 pt-10 text-center">
         <p className="text-sm font-medium text-gray-900">
           {product.categories && (
-            <Link
-              href={`/${product.categories.results[0].slug}/${product.slug}`}
-            >
+            <Link href={`/${product.categories[0].slug}/${product.slug}`}>
               <span aria-hidden="true" className="absolute inset-0" />
               {product.name}
             </Link>

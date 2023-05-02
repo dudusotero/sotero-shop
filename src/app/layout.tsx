@@ -1,9 +1,9 @@
+import { Header } from '@/components'
+import swell from '@/instances/swell'
 import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
 
 const { SITE_NAME } = process.env
-
-export const revalidate = 10
 
 export const metadata = {
   title: {
@@ -27,16 +27,27 @@ export const metadata = {
   },
 }
 
-export default function RootLayout({
+export const revalidate = 60
+
+async function getCategories() {
+  return swell.categories.list()
+}
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const data = await getCategories()
+
   return (
     <html lang="en">
       <body>
-        {children}
-        <Analytics />
+        <Header categories={data.results} />
+        <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 lg:pt-16">
+          {children}
+          <Analytics />
+        </div>
       </body>
     </html>
   )

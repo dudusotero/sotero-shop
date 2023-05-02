@@ -1,8 +1,5 @@
-export interface Product {
-  image: {
-    url: string
-    width: number
-    height: number
-    alt?: string
-  }
+export interface Product extends swell.Product {
+  categories: Category[]
 }
+
+export type Category = swell.Category
