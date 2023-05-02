@@ -24,8 +24,9 @@ function Header({ categories }: Props) {
           <Link href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">Sotero Shop</span>
             <Image
-              className="h-8 w-auto invert"
-              src="/icon"
+              priority
+              className="h-8 w-auto"
+              src="/images/ss-logo.png"
               alt=""
               width={32}
               height={32}
@@ -74,8 +75,9 @@ function Header({ categories }: Props) {
             <Link href="/" className="-m-1.5 p-1.5">
               <span className="sr-only">Sotero Shop</span>
               <Image
-                className="h-8 w-auto invert"
-                src="/icon"
+                priority
+                className="h-8 w-auto"
+                src="/images/ss-logo.png"
                 alt=""
                 width={32}
                 height={32}

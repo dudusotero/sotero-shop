@@ -28,7 +28,7 @@ function ProductOverview({ product }: Props) {
                         <Image
                           src={image.file?.url as string}
                           alt={image.caption || ''}
-                          className="h-full w-full object-cover object-center"
+                          className="h-full w-full bg-gray-200 object-cover object-center"
                           width={image.file?.width}
                           height={image.file?.height}
                         />
@@ -53,7 +53,7 @@ function ProductOverview({ product }: Props) {
                 <Image
                   src={image.file?.url!}
                   alt={image.caption || ''}
-                  className="h-full w-full object-cover object-center sm:rounded-lg"
+                  className="h-full w-full bg-gray-200 object-cover object-center sm:rounded-lg"
                   width={image.file?.width}
                   height={image.file?.height}
                 />
@@ -87,7 +87,7 @@ function ProductOverview({ product }: Props) {
           />
         </div>
 
-        <form className="mt-6">
+        <form className="mt-6" onSubmit={(e) => e.preventDefault()}>
           <div className="mt-10 flex">
             <button
               type="submit"
