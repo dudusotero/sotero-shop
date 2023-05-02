@@ -4,7 +4,7 @@ const nextConfig = {
     appDir: true,
   },
   images: {
-    domains: ['cdn.swell.store'],
+    domains: ['cdn.swell.store', 'gravatar.com'],
   },
 }
 

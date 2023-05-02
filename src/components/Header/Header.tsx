@@ -1,5 +1,6 @@
 'use client'
 
+import { AvatarMenu } from '@/components'
 import type { Category } from '@/types'
 import { Dialog } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
@@ -55,12 +56,7 @@ function Header({ categories }: Props) {
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Link
-            href="/signin"
-            className="text-sm font-semibold leading-6 text-gray-900"
-          >
-            Log in <span aria-hidden="true">&rarr;</span>
-          </Link>
+          <AvatarMenu />
         </div>
       </nav>
       <Dialog
@@ -107,13 +103,7 @@ function Header({ categories }: Props) {
                 ))}
               </div>
               <div className="py-6">
-                <Link
-                  href="/signin"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                >
-                  Log in
-                </Link>
+                <AvatarMenu onClick={() => setMobileMenuOpen(false)} />
               </div>
             </div>
           </div>

@@ -1,7 +1,9 @@
-import { Header } from '@/components'
+import { Header, Provider } from '@/components'
+import { authOptions } from '@/instances/next-auth'
 import swell from '@/instances/swell'
 import { Analytics } from '@vercel/analytics/react'
 import classNames from 'classnames'
+import { getServerSession } from 'next-auth'
 import { Inter, Roboto_Mono } from 'next/font/google'
 import './globals.css'
 
@@ -53,6 +55,7 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   const data = await getCategories()
+  const session = await getServerSession(authOptions)
 
   return (
     <html
@@ -60,11 +63,13 @@ export default async function RootLayout({
       className={classNames(inter.variable, roboto_mono.variable)}
     >
       <body>
-        <Header categories={data.results} />
-        <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 lg:pt-16">
-          {children}
-          <Analytics />
-        </div>
+        <Provider session={session}>
+          <Header categories={data.results} />
+          <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 lg:pt-16">
+            {children}
+            <Analytics />
+          </div>
+        </Provider>
       </body>
     </html>
   )
