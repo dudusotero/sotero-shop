@@ -1,6 +1,7 @@
 import { Header } from '@/components'
 import swell from '@/instances/swell'
 import { Analytics } from '@vercel/analytics/react'
+import classNames from 'classnames'
 import { Inter, Roboto_Mono } from 'next/font/google'
 import './globals.css'
 
@@ -54,7 +55,10 @@ export default async function RootLayout({
   const data = await getCategories()
 
   return (
-    <html lang="en" className={`${inter.variable} ${roboto_mono.variable}`}>
+    <html
+      lang="en"
+      className={classNames(inter.variable, roboto_mono.variable)}
+    >
       <body>
         <Header categories={data.results} />
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 lg:pt-16">
