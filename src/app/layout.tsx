@@ -1,7 +1,20 @@
 import { Header } from '@/components'
 import swell from '@/instances/swell'
 import { Analytics } from '@vercel/analytics/react'
+import { Inter, Roboto_Mono } from 'next/font/google'
 import './globals.css'
+
+const inter = Inter({
+  variable: '--font-inter',
+  display: 'swap',
+  subsets: ['latin'],
+})
+
+const roboto_mono = Roboto_Mono({
+  variable: '--font-roboto-mono',
+  display: 'swap',
+  subsets: ['latin'],
+})
 
 const { SITE_NAME } = process.env
 
@@ -41,7 +54,7 @@ export default async function RootLayout({
   const data = await getCategories()
 
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${roboto_mono.variable}`}>
       <body>
         <Header categories={data.results} />
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 lg:pt-16">
