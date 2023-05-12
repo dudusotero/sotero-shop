@@ -6,12 +6,12 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useSWRConfig } from 'swr'
 
 type Props = {
-  account?: swell.Account
+  account?: swell.Account | undefined
 }
 
-type FormValues = Omit<swell.Account, 'orderValue'>
+type FormValues = swell.Account
 
-export default function ProfileForm({ account }) {
+export default function ProfileForm({ account }: Props) {
   const { mutate } = useSWRConfig()
   const router = useRouter()
   const { register, handleSubmit, reset } = useForm<FormValues>({
