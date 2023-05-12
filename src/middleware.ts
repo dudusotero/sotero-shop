@@ -47,6 +47,12 @@ export async function middleware(request: NextRequest) {
       return response
     }
 
+    // const r = NextResponse.next()
+    // r.headers.set(
+    //   'X-Account',
+    //   Buffer.from(JSON.stringify(account), 'utf8').toString('base64')
+    // )
+    // return r
     return NextResponse.next()
   } catch (error) {
     console.error(error)

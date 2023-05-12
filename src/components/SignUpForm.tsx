@@ -18,13 +18,7 @@ export default function SignUpForm() {
   const { mutate } = useSWRConfig()
   const { register, handleSubmit } = useForm<FormValues>()
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    const response = await createUser({
-      first_name: data.firstName,
-      last_name: data.lastName,
-      email: data.email,
-      email_optin: data.emailOptin,
-      password: data.password,
-    })
+    const response = await createUser(data)
     mutate('/api/me', response)
     router.refresh()
     router.push('/')
