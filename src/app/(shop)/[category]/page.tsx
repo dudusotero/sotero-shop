@@ -1,6 +1,7 @@
 import ProductCard from '@/components/ProductCard'
 import { getCategoryBySlug } from '@/lib/swell/categories'
 import { getProductsByCategorySlug } from '@/lib/swell/products'
+import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 export const revalidate = 1800
@@ -8,6 +9,26 @@ export const revalidate = 1800
 type Props = {
   params: {
     category: string
+  }
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { category } = params
+
+  const categoryData = await getCategoryBySlug(category)
+
+  return {
+    title: categoryData.name,
+    openGraph: {
+      images: [
+        {
+          url: `/api/og?title=${encodeURIComponent(categoryData.name || '')}`,
+          width: 1200,
+          height: 630,
+        },
+      ],
+      type: 'website',
+    },
   }
 }
 
