@@ -1,10 +1,20 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
   images: {
-    domains: ['cdn.swell.store', 'gravatar.com', 'cdn.schema.io'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.swell.store',
+      },
+      {
+        protocol: 'https',
+        hostname: 'gravatar.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.schema.io',
+      },
+    ],
   },
 }
 

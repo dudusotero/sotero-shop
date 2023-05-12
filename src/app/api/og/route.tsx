@@ -10,7 +10,7 @@ export async function GET(
 
     const title = searchParams.has('title')
       ? searchParams.get('title')?.slice(0, 100)
-      : process.env.SITE_NAME
+      : process.env.NEXT_PUBLIC_SITE_NAME
 
     return new ImageResponse(
       (
@@ -36,7 +36,7 @@ export async function GET(
   } catch (e) {
     if (!(e instanceof Error)) throw e
 
-    console.log(e.message)
+    console.error(e.message)
     return new Response(`Failed to generate the image`, {
       status: 500,
     })

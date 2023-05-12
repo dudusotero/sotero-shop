@@ -1,0 +1,36 @@
+import ProductCard from '@/components/ProductCard'
+import { getCategoryBySlug } from '@/lib/swell/categories'
+import { getProductsByCategorySlug } from '@/lib/swell/products'
+import { notFound } from 'next/navigation'
+
+export const revalidate = 1800
+
+type Props = {
+  params: {
+    category: string
+  }
+}
+
+export default async function Category({ params }: Props) {
+  const { category } = params
+
+  const [categoryData, productsData] = await Promise.all([
+    getCategoryBySlug(category),
+    getProductsByCategorySlug(category),
+  ])
+
+  if (!categoryData || !productsData) {
+    notFound()
+  }
+
+  return (
+    <div className="mt-4 grid grid-cols-1 border-l border-t border-gray-200 sm:grid-cols-2 md:mt-8 md:grid-cols-3 lg:mt-12 lg:grid-cols-4 xl:grid-cols-5">
+      {productsData.results.map((product) => (
+        <ProductCard
+          key={product.id}
+          product={{ ...product, categories: [categoryData] }}
+        />
+      ))}
+    </div>
+  )
+}

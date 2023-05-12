@@ -1,9 +1,9 @@
-import { Header, Provider } from '@/components'
-import { authOptions } from '@/instances/next-auth'
-import swell from '@/instances/swell'
+import { StoreFooter, StoreNavigation } from '@/components'
+import { BASE_URL } from '@/constants'
+import { getCategories } from '@/lib/swell/categories'
 import { Analytics } from '@vercel/analytics/react'
 import classNames from 'classnames'
-import { getServerSession } from 'next-auth'
+import type { Metadata } from 'next'
 import { Inter, Roboto_Mono } from 'next/font/google'
 import NextTopLoader from 'nextjs-toploader'
 import './globals.css'
@@ -20,12 +20,13 @@ const roboto_mono = Roboto_Mono({
   subsets: ['latin'],
 })
 
-const { SITE_NAME } = process.env
+const { NEXT_PUBLIC_SITE_NAME } = process.env
 
-export const metadata = {
+export const metadata: Metadata = {
+  metadataBase: new URL(BASE_URL),
   title: {
-    default: SITE_NAME!,
-    template: `%s | ${SITE_NAME}`,
+    default: NEXT_PUBLIC_SITE_NAME!,
+    template: `%s | ${NEXT_PUBLIC_SITE_NAME}`,
   },
   robots: {
     follow: true,
@@ -35,7 +36,9 @@ export const metadata = {
   openGraph: {
     images: [
       {
-        url: `/api/og?title=${encodeURIComponent(process.env.SITE_NAME || '')}`,
+        url: `/api/og?title=${encodeURIComponent(
+          process.env.NEXT_PUBLIC_SITE_NAME || ''
+        )}`,
         width: 1200,
         height: 630,
       },
@@ -44,34 +47,32 @@ export const metadata = {
   },
 }
 
-export const revalidate = 60
+export const revalidate = 1800
 
-async function getCategories() {
-  return swell.categories.list()
+type Props = {
+  children: React.ReactNode
 }
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default async function RootLayout({ children }: Props) {
   const data = await getCategories()
-  const session = await getServerSession(authOptions)
 
   return (
     <html
-      lang="en"
-      className={classNames(inter.variable, roboto_mono.variable)}
+      lang="en-US"
+      className={classNames(
+        inter.variable,
+        roboto_mono.variable,
+        'h-full bg-white'
+      )}
     >
-      <body>
-        <NextTopLoader showSpinner={false} color="rgb(79 70 229)" />
-        <Provider session={session}>
-          <Header categories={data.results} />
-          <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 lg:pt-16">
-            {children}
-            <Analytics />
-          </div>
-        </Provider>
+      <body className="h-full">
+        <div className="mx-auto flex h-full max-w-7xl flex-col px-4 sm:px-6 lg:px-8">
+          <NextTopLoader showSpinner={false} color="rgb(79 70 229)" />
+          <StoreNavigation categories={data.results} />
+          {children}
+          <StoreFooter />
+          <Analytics />
+        </div>
       </body>
     </html>
   )

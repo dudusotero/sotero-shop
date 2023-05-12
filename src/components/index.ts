@@ -1,6 +1,2 @@
-export { AvatarMenu } from './AvatarMenu'
-export { Header } from './Header'
-export { ProductCard } from './ProductCard'
-export { ProductOverview } from './ProductOverview'
-export { Provider } from './Provider'
-export { SignInForm } from './SignInForm'
+export { StoreFooter } from './StoreFooter'
+export { StoreNavigation } from './StoreNavigation'
