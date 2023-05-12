@@ -1,5 +1,10 @@
 import SignUpForm from '@/components/SignUpForm'
+import type { Metadata } from 'next'
 import Image from 'next/image'
+
+export const metadata: Metadata = {
+  title: 'Sign Up',
+}
 
 export default function SignUp() {
   return (

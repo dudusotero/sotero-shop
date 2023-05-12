@@ -1,6 +1,6 @@
 import ProductOverview from '@/components/ProductOverview'
 import { getProductBySlug } from '@/lib/swell/products'
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 export const revalidate = 1800

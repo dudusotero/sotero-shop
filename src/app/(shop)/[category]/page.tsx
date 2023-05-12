@@ -1,7 +1,7 @@
 import ProductCard from '@/components/ProductCard'
 import { getCategoryBySlug } from '@/lib/swell/categories'
 import { getProductsByCategorySlug } from '@/lib/swell/products'
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 export const revalidate = 1800

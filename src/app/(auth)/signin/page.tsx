@@ -1,5 +1,10 @@
 import SignInForm from '@/components/SignInForm'
+import type { Metadata } from 'next'
 import Image from 'next/image'
+
+export const metadata: Metadata = {
+  title: 'Sign In',
+}
 
 export default function SignIn() {
   return (
