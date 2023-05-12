@@ -6,19 +6,49 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useSWRConfig } from 'swr'
 
 type Props = {
-  account?: swell.Account | undefined
+  account?: swell.Account
 }
 
-type FormValues = swell.Account
+type FormValues = {
+  firstName: string
+  lastName: string
+  email: string
+  shipping: {
+    country: string
+    phone: string
+    address1: string
+    city: string
+    state: string
+    zip: string
+  }
+  emailOptin?: boolean
+}
 
 export default function ProfileForm({ account }: Props) {
   const { mutate } = useSWRConfig()
   const router = useRouter()
   const { register, handleSubmit, reset } = useForm<FormValues>({
-    defaultValues: async () => account || getCurrentUser(),
+    defaultValues: async () => {
+      const data = account || (await getCurrentUser())
+
+      return {
+        firstName: data.first_name || data.firstName || '',
+        lastName: data.last_name || data.lastName || '',
+        email: data.email || '',
+        shipping: {
+          country: data.shipping?.country || '',
+          phone: data.shipping?.phone || '',
+          address1: data.shipping?.address1 || '',
+          city: data.shipping?.city || '',
+          state: data.shipping?.state || '',
+          zip: data.shipping?.zip || '',
+        },
+        emailOptin: data.email_optin || data.emailOptin,
+      }
+    },
   })
 
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+  const onSubmit: SubmitHandler<swell.Account> = async (data) => {
     const { orderValue, orderCount, dateCreated, balance, id, ...formData } =
       data
 
