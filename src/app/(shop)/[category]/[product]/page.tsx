@@ -17,11 +17,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const productData = await getProductBySlug(product)
 
   return {
-    title: productData.name,
+    title: productData?.name,
     openGraph: {
       images: [
         {
-          url: `/api/og?title=${encodeURIComponent(productData.name || '')}`,
+          url: `/api/og?title=${encodeURIComponent(productData?.name || '')}`,
           width: 1200,
           height: 630,
         },

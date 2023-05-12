@@ -18,11 +18,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const categoryData = await getCategoryBySlug(category)
 
   return {
-    title: categoryData.name,
+    title: categoryData?.name,
     openGraph: {
       images: [
         {
-          url: `/api/og?title=${encodeURIComponent(categoryData.name || '')}`,
+          url: `/api/og?title=${encodeURIComponent(categoryData?.name || '')}`,
           width: 1200,
           height: 630,
         },
