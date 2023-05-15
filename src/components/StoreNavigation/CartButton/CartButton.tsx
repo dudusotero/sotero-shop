@@ -14,7 +14,7 @@ export default function CartButton() {
   const { data } = useSWR('cart', getCart)
   const { mutate } = useSWRConfig()
 
-  const counter = data?.itemQuantity || 0
+  const counter = data?.item_quantity || 0
 
   return (
     <>
@@ -155,7 +155,7 @@ export default function CartButton() {
                             {new Intl.NumberFormat('en-US', {
                               style: 'currency',
                               currency: data?.currency || 'USD',
-                            }).format(data?.subTotal || 0)}
+                            }).format(data?.sub_total || 0)}
                           </p>
                         </div>
                         <p className="mt-0.5 text-sm text-gray-500">
@@ -163,7 +163,7 @@ export default function CartButton() {
                         </p>
                         <div className="mt-6">
                           <Link
-                            href={data?.checkoutUrl || ''}
+                            href={data?.checkout_url || ''}
                             className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                           >
                             Checkout

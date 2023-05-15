@@ -1,8 +1,6 @@
 import swell from 'swell-js'
 
-const options: swell.InitOptions = {
-  useCamelCase: true,
-}
+const options: swell.InitOptions = {}
 
 swell.init(
   process.env.NEXT_PUBLIC_SWELL_STORE_ID!,

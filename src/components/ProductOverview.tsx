@@ -95,7 +95,7 @@ export default function ProductOverview({ product }: Props) {
           className="mt-6"
           onSubmit={async (e) => {
             e.preventDefault()
-            await addToCart({ quantity: 1, productId: product.id })
+            await addToCart({ quantity: 1, product_id: product.id })
             mutate('cart')
           }}
         >

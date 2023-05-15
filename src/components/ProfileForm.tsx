@@ -11,8 +11,8 @@ type Props = {
 }
 
 type FormValues = {
-  firstName: string
-  lastName: string
+  first_name: string
+  last_name: string
   email: string
   shipping: {
     country: string
@@ -22,7 +22,7 @@ type FormValues = {
     state: string
     zip: string
   }
-  emailOptin?: boolean
+  email_optin?: boolean
 }
 
 export default function ProfileForm({ account }: Props) {
@@ -34,8 +34,8 @@ export default function ProfileForm({ account }: Props) {
       const data = account || (await getCurrentUser())
 
       return {
-        firstName: data.first_name || data.firstName || '',
-        lastName: data.last_name || data.lastName || '',
+        first_name: data.first_name || '',
+        last_name: data.last_name || '',
         email: data.email || '',
         shipping: {
           country: data.shipping?.country || '',
@@ -45,7 +45,7 @@ export default function ProfileForm({ account }: Props) {
           state: data.shipping?.state || '',
           zip: data.shipping?.zip || '',
         },
-        emailOptin: data.email_optin || data.emailOptin,
+        email_optin: data.email_optin,
       }
     },
   })
@@ -87,7 +87,7 @@ export default function ProfileForm({ account }: Props) {
                   type="text"
                   id="firstName"
                   autoComplete="given-name"
-                  {...register('firstName', {
+                  {...register('first_name', {
                     required: true,
                   })}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -107,7 +107,7 @@ export default function ProfileForm({ account }: Props) {
                   type="text"
                   id="lastName"
                   autoComplete="family-name"
-                  {...register('lastName', {
+                  {...register('last_name', {
                     required: true,
                   })}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -297,7 +297,7 @@ export default function ProfileForm({ account }: Props) {
                     <input
                       id="emailOptin"
                       type="checkbox"
-                      {...register('emailOptin')}
+                      {...register('email_optin')}
                       className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
                     />
                   </div>
