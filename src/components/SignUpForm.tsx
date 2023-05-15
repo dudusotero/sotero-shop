@@ -2,6 +2,7 @@
 
 import { createUser } from '@/lib/swell/account'
 import { useRouter } from 'next/navigation'
+import { useTransition } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useSWRConfig } from 'swr'
 
@@ -15,13 +16,17 @@ type FormValues = {
 
 export default function SignUpForm() {
   const router = useRouter()
+  const [isPending, startTransition] = useTransition()
   const { mutate } = useSWRConfig()
   const { register, handleSubmit } = useForm<FormValues>()
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const response = await createUser(data)
-    mutate('/api/me', response)
-    router.refresh()
-    router.push('/')
+
+    startTransition(() => {
+      mutate('/api/me', response)
+      router.refresh()
+      router.push('/')
+    })
   }
 
   return (
@@ -124,6 +129,7 @@ export default function SignUpForm() {
 
       <div>
         <button
+          disabled={isPending}
           type="submit"
           className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >

@@ -4,13 +4,14 @@ import { UserIcon } from '@heroicons/react/24/outline'
 import classNames from 'classnames'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Fragment } from 'react'
+import { Fragment, useTransition } from 'react'
 import { useSWRConfig } from 'swr'
 
 const userNavigation = [{ name: 'Your Profile', href: '/profile' }]
 
 export default function AvatarDropdown() {
   const router = useRouter()
+  const [isPending, startTransition] = useTransition()
   const { mutate } = useSWRConfig()
 
   return (
@@ -48,12 +49,15 @@ export default function AvatarDropdown() {
           <Menu.Item>
             {({ active }) => (
               <button
+                disabled={isPending}
                 type="button"
                 onClick={async () => {
                   await logoutUser()
-                  mutate('/api/me', null)
-                  router.refresh()
-                  router.push('/')
+                  startTransition(() => {
+                    mutate('/api/me', null)
+                    router.refresh()
+                    router.push('/')
+                  })
                 }}
                 className={classNames(
                   active ? 'bg-gray-100' : '',

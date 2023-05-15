@@ -2,6 +2,7 @@
 
 import { getCurrentUser, updateAccount } from '@/lib/swell/account'
 import { useRouter } from 'next/navigation'
+import { useTransition } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useSWRConfig } from 'swr'
 
@@ -27,6 +28,7 @@ type FormValues = {
 export default function ProfileForm({ account }: Props) {
   const { mutate } = useSWRConfig()
   const router = useRouter()
+  const [isPending, startTransition] = useTransition()
   const { register, handleSubmit, reset } = useForm<FormValues>({
     defaultValues: async () => {
       const data = account || (await getCurrentUser())
@@ -53,8 +55,10 @@ export default function ProfileForm({ account }: Props) {
       data
 
     const response = await updateAccount(formData)
-    mutate('/api/me', response)
-    router.refresh()
+    startTransition(() => {
+      mutate('/api/me', response)
+      router.refresh()
+    })
   }
 
   return (
@@ -324,6 +328,7 @@ export default function ProfileForm({ account }: Props) {
           Cancel
         </button>
         <button
+          disabled={isPending}
           type="submit"
           className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >

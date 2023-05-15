@@ -2,6 +2,7 @@
 
 import { loginUser } from '@/lib/swell/account'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { useTransition } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useSWRConfig } from 'swr'
 
@@ -12,6 +13,7 @@ type FormValues = {
 
 export default function SignInForm() {
   const router = useRouter()
+  const [isPending, startTransition] = useTransition()
   const searchParams = useSearchParams()
   const { mutate } = useSWRConfig()
   const { register, handleSubmit } = useForm<FormValues>()
@@ -20,9 +22,12 @@ export default function SignInForm() {
       email: data.email,
       password: data.password,
     })
-    mutate('/api/me', response)
-    router.refresh()
-    router.push(searchParams.get('redirectTo') || '/')
+
+    startTransition(() => {
+      mutate('/api/me', response)
+      router.refresh()
+      router.push(searchParams.get('redirectTo') || '/')
+    })
   }
 
   return (
@@ -79,6 +84,7 @@ export default function SignInForm() {
 
       <div>
         <button
+          disabled={isPending}
           type="submit"
           className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
