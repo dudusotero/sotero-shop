@@ -1,7 +1,8 @@
 import swell from '@/lib/swell'
 
-export const getProducts = () =>
+export const getProducts = (input?: swell.ProductQuery) =>
   swell.products.list({
+    ...input,
     expand: ['categories'],
   }) as Promise<
     swell.ResultsResponse<swell.Product & { categories: swell.Category[] }>

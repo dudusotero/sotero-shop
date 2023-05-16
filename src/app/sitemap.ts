@@ -6,12 +6,16 @@ import { MetadataRoute } from 'next'
 export const revalidate = 1800
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const routesMap = ['', '/signin', '/signup', '/forgot-password'].map(
-    (route) => ({
-      url: `${BASE_URL}${route}`,
-      lastModified: new Date().toISOString(),
-    })
-  )
+  const routesMap = [
+    '',
+    '/signin',
+    '/signup',
+    '/forgot-password',
+    '/search',
+  ].map((route) => ({
+    url: `${BASE_URL}${route}`,
+    lastModified: new Date().toISOString(),
+  }))
 
   const categoriesPromise = getCategories().then((categories) =>
     categories.results.map((category) => ({

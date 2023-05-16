@@ -1,17 +1,17 @@
 import { create } from 'zustand'
 
-interface CartSliderState {
+interface FilterSliderState {
   opened: boolean
   open: () => void
   close: () => void
   toggle: () => void
 }
 
-const useCartSlider = create<CartSliderState>((set) => ({
+const useFilterSlider = create<FilterSliderState>((set) => ({
   opened: false,
   open: () => set(() => ({ opened: true })),
   close: () => set(() => ({ opened: false })),
   toggle: () => set((state) => ({ opened: !state.opened })),
 }))
 
-export default useCartSlider
+export default useFilterSlider
