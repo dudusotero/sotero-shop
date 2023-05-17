@@ -15,15 +15,23 @@ type Props = {
 }
 
 export default function StoreNavigation({ categories }: Props) {
-  const opened = useMenu((state) => state.opened)
+  const opened = useMenu((state) => state.header)
   const open = useMenu((state) => state.open)
   const close = useMenu((state) => state.close)
+
+  const handleOpen = () => open('header')
+  const handleClose = () => close('header')
+
   const { user, isLoading } = useUser()
 
   return (
     <>
       <Transition.Root show={opened} as={Fragment}>
-        <Dialog as="div" className="relative z-40 lg:hidden" onClose={close}>
+        <Dialog
+          as="div"
+          className="relative z-40 lg:hidden"
+          onClose={handleClose}
+        >
           <Transition.Child
             as={Fragment}
             enter="transition-opacity ease-linear duration-300"
@@ -51,7 +59,7 @@ export default function StoreNavigation({ categories }: Props) {
                   <button
                     type="button"
                     className="-m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400"
-                    onClick={close}
+                    onClick={handleClose}
                   >
                     <span className="sr-only">Close menu</span>
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
@@ -63,7 +71,7 @@ export default function StoreNavigation({ categories }: Props) {
                     <div key={category.id} className="flow-root">
                       <Link
                         href={`/${category.slug}`}
-                        onClick={close}
+                        onClick={handleClose}
                         className="-m-2 block p-2 font-medium text-gray-900"
                       >
                         {category.name}
@@ -77,7 +85,7 @@ export default function StoreNavigation({ categories }: Props) {
                     <div className="flow-root">
                       <Link
                         href="/signin"
-                        onClick={close}
+                        onClick={handleClose}
                         className="-m-2 block p-2 font-medium text-gray-900"
                       >
                         Sign in
@@ -86,7 +94,7 @@ export default function StoreNavigation({ categories }: Props) {
                     <div className="flow-root">
                       <Link
                         href="/signup"
-                        onClick={close}
+                        onClick={handleClose}
                         className="-m-2 block p-2 font-medium text-gray-900"
                       >
                         Create account
@@ -107,7 +115,7 @@ export default function StoreNavigation({ categories }: Props) {
               <button
                 type="button"
                 className="rounded-md bg-white p-2 text-gray-400 lg:hidden"
-                onClick={open}
+                onClick={handleOpen}
               >
                 <span className="sr-only">Open menu</span>
                 <Bars3Icon className="h-6 w-6" aria-hidden="true" />

@@ -1,6 +1,6 @@
 'use client'
 
-import useFilterSlider from '@/hooks/useFilterSlider'
+import useMenu from '@/hooks/useMenu'
 import { Dialog, Disclosure, Transition } from '@headlessui/react'
 import { ChevronDownIcon, PlusIcon } from '@heroicons/react/20/solid'
 import { XMarkIcon } from '@heroicons/react/24/outline'
@@ -19,14 +19,21 @@ type Props = {
 }
 
 export default function SidebarFilter({ filters }: Props) {
-  const { opened, open, close } = useFilterSlider()
+  const opened = useMenu((state) => state.filter)
+  const open = useMenu((state) => state.open)
+  const close = useMenu((state) => state.close)
 
-  console.log(filters)
+  const handleOpen = () => open('filter')
+  const handleClose = () => close('filter')
 
   return (
     <>
       <Transition.Root show={opened} as={Fragment}>
-        <Dialog as="div" className="relative z-40 lg:hidden" onClose={close}>
+        <Dialog
+          as="div"
+          className="relative z-40 lg:hidden"
+          onClose={handleClose}
+        >
           <Transition.Child
             as={Fragment}
             enter="transition-opacity ease-linear duration-300"
@@ -55,7 +62,7 @@ export default function SidebarFilter({ filters }: Props) {
                   <button
                     type="button"
                     className="-mr-2 flex h-10 w-10 items-center justify-center p-2 text-gray-400 hover:text-gray-500"
-                    onClick={close}
+                    onClick={handleClose}
                   >
                     <span className="sr-only">Close menu</span>
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
@@ -129,7 +136,7 @@ export default function SidebarFilter({ filters }: Props) {
         <button
           type="button"
           className="inline-flex items-center lg:hidden"
-          onClick={open}
+          onClick={handleOpen}
         >
           <span className="text-sm font-medium text-gray-700">Filters</span>
           <PlusIcon

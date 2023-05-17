@@ -1,4 +1,4 @@
-import useCartSlider from '@/hooks/useCartSlider'
+import useMenu from '@/hooks/useMenu'
 import { getCart, removeFromCart } from '@/lib/swell/cart'
 import { Dialog, Transition } from '@headlessui/react'
 import { ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
@@ -8,9 +8,13 @@ import { Fragment } from 'react'
 import useSWR, { useSWRConfig } from 'swr'
 
 export default function CartButton() {
-  const opened = useCartSlider((state) => state.opened)
-  const open = useCartSlider((state) => state.open)
-  const close = useCartSlider((state) => state.close)
+  const opened = useMenu((state) => state.cart)
+  const open = useMenu((state) => state.open)
+  const close = useMenu((state) => state.close)
+
+  const handleOpen = () => open('cart')
+  const handleClose = () => close('cart')
+
   const { data } = useSWR('cart', getCart)
   const { mutate } = useSWRConfig()
 
@@ -21,7 +25,7 @@ export default function CartButton() {
       <button
         type="button"
         className="group -m-2 flex items-center p-2"
-        onClick={open}
+        onClick={handleOpen}
       >
         <ShoppingBagIcon
           className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
@@ -33,7 +37,7 @@ export default function CartButton() {
         <span className="sr-only">items in cart, view bag</span>
       </button>
       <Transition.Root show={opened} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={close}>
+        <Dialog as="div" className="relative z-10" onClose={handleClose}>
           <Transition.Child
             as={Fragment}
             enter="ease-in-out duration-500"
@@ -69,7 +73,7 @@ export default function CartButton() {
                             <button
                               type="button"
                               className="-m-2 p-2 text-gray-400 hover:text-gray-500"
-                              onClick={close}
+                              onClick={handleClose}
                             >
                               <span className="sr-only">Close panel</span>
                               <XMarkIcon
@@ -175,7 +179,7 @@ export default function CartButton() {
                             <button
                               type="button"
                               className="font-medium text-indigo-600 hover:text-indigo-500"
-                              onClick={close}
+                              onClick={handleClose}
                             >
                               Continue Shopping
                               <span aria-hidden="true"> &rarr;</span>

@@ -1,17 +1,24 @@
 import { create } from 'zustand'
 
-interface MenuState {
-  opened: boolean
-  open: () => void
-  close: () => void
-  toggle: () => void
+type Key = 'cart' | 'header' | 'filter'
+
+type State = {
+  [key in Key]: boolean
 }
 
-const useMenu = create<MenuState>((set) => ({
-  opened: false,
-  open: () => set(() => ({ opened: true })),
-  close: () => set(() => ({ opened: false })),
-  toggle: () => set((state) => ({ opened: !state.opened })),
+type Actions = {
+  open: (key: Key) => void
+  close: (key: Key) => void
+  toggle: (key: Key) => void
+}
+
+const useMenu = create<State & Actions>((set) => ({
+  cart: false,
+  header: false,
+  filter: false,
+  open: (key) => set(() => ({ [key]: true })),
+  close: (key) => set(() => ({ [key]: false })),
+  toggle: (key) => set((state) => ({ [key]: !state[key] })),
 }))
 
 export default useMenu
