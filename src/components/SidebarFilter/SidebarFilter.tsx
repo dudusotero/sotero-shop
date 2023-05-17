@@ -178,7 +178,7 @@ export default function SidebarFilter({ filters }: Props) {
 
         <button
           type="button"
-          className="inline-flex items-center lg:hidden"
+          className="mb-4 inline-flex items-center lg:hidden"
           onClick={handleOpen}
         >
           <span className="text-sm font-medium text-gray-700">Filters</span>
