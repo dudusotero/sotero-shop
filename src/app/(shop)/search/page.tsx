@@ -1,15 +1,33 @@
 import { SidebarFilter } from '@/components'
 import ProductCard from '@/components/ProductCard'
-import { getAttributes } from '@/lib/swell/attributes'
-import { getCategories } from '@/lib/swell/categories'
+import { getProductFilters } from '@/lib/swell/filters'
 import { getProducts } from '@/lib/swell/products'
+import { redirect } from 'next/navigation'
 
-export default async function Search() {
-  const [productsData, categoriesData, attributesData] = await Promise.all([
-    getProducts(),
-    getCategories(),
-    getAttributes(),
-  ])
+type Props = {
+  searchParams: {
+    search?: string
+    category?: string
+    sizes?: string
+  }
+}
+
+export default async function Search({ searchParams }: Props) {
+  const search = searchParams.search
+  const category = searchParams.category?.split(',')
+  const sizes = searchParams.sizes?.split(',')
+
+  const products = await getProducts({
+    search,
+    $filters: {
+      category,
+      sizes,
+    },
+  })
+  if (products.results.length === 0) {
+    redirect('/search')
+  }
+  const filters = await getProductFilters(products)
 
   return (
     <main className="mt-4 md:mt-8 lg:mt-12">
@@ -23,30 +41,11 @@ export default async function Search() {
       </div>
 
       <div className="pt-12 lg:grid lg:grid-cols-3 lg:gap-x-8 xl:grid-cols-4">
-        <SidebarFilter
-          filters={[
-            {
-              id: 'category',
-              name: 'Category',
-              options: categoriesData.results.map((category) => ({
-                value: category.slug,
-                label: category.name,
-              })),
-            },
-            ...(attributesData.results.map((attribute) => ({
-              id: attribute.id!,
-              name: attribute.name!,
-              options: attribute.values?.map((value) => ({
-                value,
-                label: value,
-              })),
-            })) as any),
-          ]}
-        />
+        <SidebarFilter filters={filters} />
 
         <div className="lg:col-span-2 xl:col-span-3">
           <div className="grid grid-cols-1 border-l border-t border-gray-200 md:grid-cols-2 lg:col-span-2 lg:grid-cols-3 xl:col-span-3 xl:grid-cols-4">
-            {productsData.results.map((product) => (
+            {products.results.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>

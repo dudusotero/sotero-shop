@@ -5,26 +5,60 @@ import { Dialog, Disclosure, Transition } from '@headlessui/react'
 import { ChevronDownIcon, PlusIcon } from '@heroicons/react/20/solid'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import classNames from 'classnames'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import type { ChangeEvent } from 'react'
 import { Fragment } from 'react'
 
 type Props = {
   filters: {
     id: string
-    name: string
+    label: string
+    type: 'range' | 'select'
     options: {
-      value: string
-      label: string
+      value: string | number
+      label: string | number
     }[]
+    interval?: number
   }[]
 }
 
 export default function SidebarFilter({ filters }: Props) {
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
   const opened = useMenu((state) => state.filter)
   const open = useMenu((state) => state.open)
   const close = useMenu((state) => state.close)
 
   const handleOpen = () => open('filter')
   const handleClose = () => close('filter')
+
+  const checkIfValueExists = (key: string, value: string | number) => {
+    const values = searchParams.get(key)?.split(',') || []
+    return values.includes(String(value))
+  }
+
+  const handleFilterChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    key: string
+  ) => {
+    const newSearchParams = new URLSearchParams(searchParams.toString())
+    const array = newSearchParams.get(key)?.split(',') || []
+    if (e.target.checked) {
+      array.push(e.target.value)
+      newSearchParams.set(key, array.toString() || e.target.value)
+    } else {
+      const newArray = array.filter((value) => value !== e.target.value)
+      if (newArray.length > 0) {
+        newSearchParams.set(key, newArray.toString())
+      } else {
+        newSearchParams.delete(key)
+      }
+    }
+    router.push(
+      pathname + (newSearchParams.size > 0 ? `?${newSearchParams}` : '')
+    )
+  }
 
   return (
     <>
@@ -71,58 +105,67 @@ export default function SidebarFilter({ filters }: Props) {
 
                 {/* Filters */}
                 <form className="mt-4">
-                  {filters.map((section) => (
-                    <Disclosure
-                      as="div"
-                      key={section.name}
-                      className="border-t border-gray-200 pb-4 pt-4"
-                    >
-                      {({ open }) => (
-                        <fieldset>
-                          <legend className="w-full px-2">
-                            <Disclosure.Button className="flex w-full items-center justify-between p-2 text-gray-400 hover:text-gray-500">
-                              <span className="text-sm font-medium text-gray-900">
-                                {section.name}
-                              </span>
-                              <span className="ml-6 flex h-7 items-center">
-                                <ChevronDownIcon
-                                  className={classNames(
-                                    open ? '-rotate-180' : 'rotate-0',
-                                    'h-5 w-5 transform'
-                                  )}
-                                  aria-hidden="true"
-                                />
-                              </span>
-                            </Disclosure.Button>
-                          </legend>
-                          <Disclosure.Panel className="px-4 pb-2 pt-4">
-                            <div className="space-y-6">
-                              {section.options.map((option, optionIdx) => (
-                                <div
-                                  key={option.value}
-                                  className="flex items-center"
-                                >
-                                  <input
-                                    id={`${section.id}-${optionIdx}-mobile`}
-                                    name={`${section.id}[]`}
-                                    defaultValue={option.value}
-                                    type="checkbox"
-                                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                  {filters
+                    .filter((filter) => filter.type !== 'range')
+                    .map((section) => (
+                      <Disclosure
+                        as="div"
+                        key={section.id}
+                        className="border-t border-gray-200 pb-4 pt-4"
+                      >
+                        {({ open }) => (
+                          <fieldset>
+                            <legend className="w-full px-2">
+                              <Disclosure.Button className="flex w-full items-center justify-between p-2 text-gray-400 hover:text-gray-500">
+                                <span className="text-sm font-medium text-gray-900">
+                                  {section.label}
+                                </span>
+                                <span className="ml-6 flex h-7 items-center">
+                                  <ChevronDownIcon
+                                    className={classNames(
+                                      open ? '-rotate-180' : 'rotate-0',
+                                      'h-5 w-5 transform'
+                                    )}
+                                    aria-hidden="true"
                                   />
-                                  <label
-                                    htmlFor={`${section.id}-${optionIdx}-mobile`}
-                                    className="ml-3 text-sm text-gray-500"
+                                </span>
+                              </Disclosure.Button>
+                            </legend>
+                            <Disclosure.Panel className="px-4 pb-2 pt-4">
+                              <div className="space-y-6">
+                                {section.options.map((option, optionIdx) => (
+                                  <div
+                                    key={option.value}
+                                    className="flex items-center"
                                   >
-                                    {option.label}
-                                  </label>
-                                </div>
-                              ))}
-                            </div>
-                          </Disclosure.Panel>
-                        </fieldset>
-                      )}
-                    </Disclosure>
-                  ))}
+                                    <input
+                                      id={`${section.id}-${optionIdx}-mobile`}
+                                      name={`${section.id}[]`}
+                                      defaultValue={option.value}
+                                      defaultChecked={checkIfValueExists(
+                                        section.id,
+                                        option.value
+                                      )}
+                                      type="checkbox"
+                                      onChange={(e) =>
+                                        handleFilterChange(e, section.id)
+                                      }
+                                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                    />
+                                    <label
+                                      htmlFor={`${section.id}-${optionIdx}-mobile`}
+                                      className="ml-3 text-sm text-gray-500"
+                                    >
+                                      {option.label}
+                                    </label>
+                                  </div>
+                                ))}
+                              </div>
+                            </Disclosure.Panel>
+                          </fieldset>
+                        )}
+                      </Disclosure>
+                    ))}
                 </form>
               </Dialog.Panel>
             </Transition.Child>
@@ -145,39 +188,46 @@ export default function SidebarFilter({ filters }: Props) {
           />
         </button>
 
-        <div className="hidden lg:block">
+        <div className="hidden pb-2 lg:block">
           <form className="space-y-10 divide-y divide-gray-200">
-            {filters.map((section, sectionIdx) => (
-              <div
-                key={section.name}
-                className={sectionIdx === 0 ? undefined : 'pt-10'}
-              >
-                <fieldset>
-                  <legend className="block text-sm font-medium text-gray-900">
-                    {section.name}
-                  </legend>
-                  <div className="space-y-3 pt-6">
-                    {section.options.map((option, optionIdx) => (
-                      <div key={option.value} className="flex items-center">
-                        <input
-                          id={`${section.id}-${optionIdx}`}
-                          name={`${section.id}[]`}
-                          defaultValue={option.value}
-                          type="checkbox"
-                          className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                        />
-                        <label
-                          htmlFor={`${section.id}-${optionIdx}`}
-                          className="ml-3 text-sm text-gray-600"
-                        >
-                          {option.label}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </fieldset>
-              </div>
-            ))}
+            {filters
+              .filter((filter) => filter.type !== 'range')
+              .map((section, sectionIdx) => (
+                <div
+                  key={section.id}
+                  className={sectionIdx === 0 ? undefined : 'pt-10'}
+                >
+                  <fieldset>
+                    <legend className="block text-sm font-medium text-gray-900">
+                      {section.label}
+                    </legend>
+                    <div className="space-y-3 pt-6">
+                      {section.options.map((option, optionIdx) => (
+                        <div key={option.value} className="flex items-center">
+                          <input
+                            id={`${section.id}-${optionIdx}`}
+                            name={`${section.id}[]`}
+                            defaultValue={option.value}
+                            defaultChecked={checkIfValueExists(
+                              section.id,
+                              option.value
+                            )}
+                            type="checkbox"
+                            onChange={(e) => handleFilterChange(e, section.id)}
+                            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                          />
+                          <label
+                            htmlFor={`${section.id}-${optionIdx}`}
+                            className="ml-3 text-sm text-gray-600"
+                          >
+                            {option.label}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </fieldset>
+                </div>
+              ))}
           </form>
         </div>
       </aside>

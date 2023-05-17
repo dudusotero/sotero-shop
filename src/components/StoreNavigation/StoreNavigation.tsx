@@ -4,7 +4,11 @@ import { AvatarDropdown } from '@/components/StoreNavigation/AvatarDropdown'
 import useMenu from '@/hooks/useMenu'
 import useUser from '@/hooks/useUser'
 import { Dialog, Transition } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import {
+  Bars3Icon,
+  MagnifyingGlassIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Fragment } from 'react'
@@ -180,6 +184,20 @@ export default function StoreNavigation({ categories }: Props) {
                     )}
                   </>
                 )}
+
+                <div className="ml-4 mr-2 flow-root lg:ml-6">
+                  <Link
+                    href="/search"
+                    className="group -m-2 flex items-center p-2"
+                  >
+                    <MagnifyingGlassIcon
+                      className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                      aria-hidden="true"
+                    />
+
+                    <span className="sr-only">searh products</span>
+                  </Link>
+                </div>
 
                 <div className="ml-4 flow-root lg:ml-6">
                   <CartButton />
